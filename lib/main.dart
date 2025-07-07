@@ -19,26 +19,45 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  int _counter = 0;
+
+  void _incrementCounter() {
+    setState(() {
+      _counter++;
+    });
+  }
+
+  void _decrementCounter() {
+    setState(() {
+      _counter--;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text('0', style: Theme.of(context).textTheme.headlineMedium),
+        child: Text("$_counter", style: Theme.of(context).textTheme.headlineMedium),
       ),
       floatingActionButton: Column(
         mainAxisSize: MainAxisSize.min,
         spacing: 8,
         children: [
           FloatingActionButton.small(
-            onPressed: () {},
+            onPressed: () => _incrementCounter(),
             tooltip: 'Increment',
             child: const Icon(Icons.add),
           ),
           FloatingActionButton.small(
-            onPressed: () {},
+            onPressed: () => _decrementCounter(),
             tooltip: 'Decrement',
             child: const Icon(Icons.remove),
           ),
