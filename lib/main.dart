@@ -1,7 +1,14 @@
+import 'package:counter_app/counter_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => CounterProvider(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -19,45 +26,33 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
+class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key});
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  void _decrementCounter() {
-    setState(() {
-      _counter--;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text("$_counter", style: Theme.of(context).textTheme.headlineMedium),
+        child: Consumer<CounterProvider>(
+          builder: (_, counterProvider, _) {
+            return Text(
+              "${counterProvider.counter}",
+              style: Theme.of(context).textTheme.headlineMedium,
+            );
+          },
+        ),
       ),
       floatingActionButton: Column(
         mainAxisSize: MainAxisSize.min,
         spacing: 8,
         children: [
           FloatingActionButton.small(
-            onPressed: () => _incrementCounter(),
+            onPressed: () => context.read<CounterProvider>().incrementCounter(),
             tooltip: 'Increment',
             child: const Icon(Icons.add),
           ),
           FloatingActionButton.small(
-            onPressed: () => _decrementCounter(),
+            onPressed: () => context.read<CounterProvider>().decrementCounter(),
             tooltip: 'Decrement',
             child: const Icon(Icons.remove),
           ),
