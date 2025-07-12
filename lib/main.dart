@@ -1,13 +1,10 @@
-import 'package:counter_app/counter_provider.dart';
+import 'package:counter_app/counter_cubit.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => CounterProvider(),
-      child: const MyApp(),
-    ),
+    BlocProvider(create: (context) => CounterCubit(), child: const MyApp()),
   );
 }
 
@@ -33,10 +30,10 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Consumer<CounterProvider>(
-          builder: (_, counterProvider, _) {
+        child: BlocBuilder<CounterCubit, int>(
+          builder: (_, counterState) {
             return Text(
-              "${counterProvider.counter}",
+              "$counterState",
               style: Theme.of(context).textTheme.headlineMedium,
             );
           },
@@ -47,12 +44,12 @@ class MyHomePage extends StatelessWidget {
         spacing: 8,
         children: [
           FloatingActionButton.small(
-            onPressed: () => context.read<CounterProvider>().incrementCounter(),
+            onPressed: () => context.read<CounterCubit>().incrementCounter(),
             tooltip: 'Increment',
             child: const Icon(Icons.add),
           ),
           FloatingActionButton.small(
-            onPressed: () => context.read<CounterProvider>().decrementCounter(),
+            onPressed: () => context.read<CounterCubit>().decrementCounter(),
             tooltip: 'Decrement',
             child: const Icon(Icons.remove),
           ),
